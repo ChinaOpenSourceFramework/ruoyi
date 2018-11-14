@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.customer.mapper.InfoMapper">
+    
+    <resultMap type="Info" id="InfoResult">
+        <result property="custId"    column="cust_id"    />
+        <result property="custName"    column="cust_name"    />
+        <result property="sex"    column="sex"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="email"    column="email"    />
+        <result property="phonenumber"    column="phonenumber"    />
+        <result property="loginName"    column="login_name"    />
+        <result property="password"    column="password"    />
+        <result property="salt"    column="salt"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="loginIp"    column="login_ip"    />
+        <result property="loginDate"    column="login_date"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectInfoVo">
+        select cust_id, cust_name, sex, avatar, email, phonenumber, login_name, password, salt, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time, remark from cust_info
+    </sql>
+	
+    <select id="selectInfoList" parameterType="Info" resultMap="InfoResult">
+        <include refid="selectInfoVo"/>
+        <where>  
+            <if test="custId != null "> and cust_id = #{custId}</if>
+             <if test="custName != null  and custName != '' "> and cust_name = #{custName}</if>
+             <if test="sex != null  and sex != '' "> and sex = #{sex}</if>
+             <if test="avatar != null  and avatar != '' "> and avatar = #{avatar}</if>
+             <if test="email != null  and email != '' "> and email = #{email}</if>
+             <if test="phonenumber != null  and phonenumber != '' "> and phonenumber = #{phonenumber}</if>
+             <if test="loginName != null  and loginName != '' "> and login_name = #{loginName}</if>
+             <if test="password != null  and password != '' "> and password = #{password}</if>
+             <if test="salt != null  and salt != '' "> and salt = #{salt}</if>
+             <if test="status != null  and status != '' "> and status = #{status}</if>
+             <if test="delFlag != null  and delFlag != '' "> and del_flag = #{delFlag}</if>
+             <if test="loginIp != null  and loginIp != '' "> and login_ip = #{loginIp}</if>
+             <if test="loginDate != null "> and login_date = #{loginDate}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectInfoById" parameterType="Integer" resultMap="InfoResult">
+        <include refid="selectInfoVo"/>
+        where cust_id = #{custId}
+    </select>
+        
+    <insert id="insertInfo" parameterType="Info">
+        insert into cust_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="custId != null  ">cust_id,</if>
+			<if test="custName != null  and custName != ''  ">cust_name,</if>
+			<if test="sex != null  and sex != ''  ">sex,</if>
+			<if test="avatar != null  and avatar != ''  ">avatar,</if>
+			<if test="email != null  and email != ''  ">email,</if>
+			<if test="phonenumber != null  and phonenumber != ''  ">phonenumber,</if>
+			<if test="loginName != null  and loginName != ''  ">login_name,</if>
+			<if test="password != null  and password != ''  ">password,</if>
+			<if test="salt != null  and salt != ''  ">salt,</if>
+			<if test="status != null  and status != ''  ">status,</if>
+			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
+			<if test="loginIp != null  and loginIp != ''  ">login_ip,</if>
+			<if test="loginDate != null  ">login_date,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="custId != null  ">#{custId},</if>
+			<if test="custName != null  and custName != ''  ">#{custName},</if>
+			<if test="sex != null  and sex != ''  ">#{sex},</if>
+			<if test="avatar != null  and avatar != ''  ">#{avatar},</if>
+			<if test="email != null  and email != ''  ">#{email},</if>
+			<if test="phonenumber != null  and phonenumber != ''  ">#{phonenumber},</if>
+			<if test="loginName != null  and loginName != ''  ">#{loginName},</if>
+			<if test="password != null  and password != ''  ">#{password},</if>
+			<if test="salt != null  and salt != ''  ">#{salt},</if>
+			<if test="status != null  and status != ''  ">#{status},</if>
+			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
+			<if test="loginIp != null  and loginIp != ''  ">#{loginIp},</if>
+			<if test="loginDate != null  ">#{loginDate},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateInfo" parameterType="Info">
+        update cust_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="custName != null  and custName != ''  ">cust_name = #{custName},</if>
+            <if test="sex != null  and sex != ''  ">sex = #{sex},</if>
+            <if test="avatar != null  and avatar != ''  ">avatar = #{avatar},</if>
+            <if test="email != null  and email != ''  ">email = #{email},</if>
+            <if test="phonenumber != null  and phonenumber != ''  ">phonenumber = #{phonenumber},</if>
+            <if test="loginName != null  and loginName != ''  ">login_name = #{loginName},</if>
+            <if test="password != null  and password != ''  ">password = #{password},</if>
+            <if test="salt != null  and salt != ''  ">salt = #{salt},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
+            <if test="loginIp != null  and loginIp != ''  ">login_ip = #{loginIp},</if>
+            <if test="loginDate != null  ">login_date = #{loginDate},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where cust_id = #{custId}
+    </update>
+
+	<delete id="deleteInfoById" parameterType="Integer">
+        delete from cust_info where cust_id = #{custId}
+    </delete>
+	
+    <delete id="deleteInfoByIds" parameterType="String">
+        delete from cust_info where cust_id in 
+        <foreach item="custId" collection="array" open="(" separator="," close=")">
+            #{custId}
+        </foreach>
+    </delete>
+    
+</mapper>
