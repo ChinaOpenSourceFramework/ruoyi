@@ -32,12 +32,6 @@
 			<artifactId>thymeleaf-extras-shiro</artifactId>
 			<version>${thymeleaf.extras.shiro.version}</version>
 		</dependency>
-		
-		<!--常用工具类 -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
 
 		<!-- JSON工具类 -->
 		<dependency>
@@ -73,24 +67,6 @@
 			<version>${poi.version}</version>
 		</dependency>
 
-		<!-- yml解析器 -->
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-		</dependency>
-
-		<!-- SpringBoot Web容器 -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
-		<!-- SpringBoot 拦截器 -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-aop</artifactId>
-		</dependency>
-
 		<!--阿里数据库连接池 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -104,7 +80,6 @@
 			<artifactId>shiro-core</artifactId>
 			<version>${shiro.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-web</artifactId>
@@ -116,7 +91,6 @@
 			<artifactId>shiro-spring</artifactId>
 			<version>${shiro.version}</version>
 		</dependency>
-		
 		<!-- Shiro使用EhCache缓存框架 -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
@@ -165,7 +139,6 @@
 			<artifactId>springfox-swagger2</artifactId>
 			<version>${swagger.version}</version>
 		</dependency>
-
 		<!-- swagger2-UI -->
 		<dependency>
 			<groupId>io.springfox</groupId>

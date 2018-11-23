@@ -14,35 +14,9 @@
 	<description>
 	    web服务入口
 	</description>
-	
-	<properties>
-	    <pagehelper.boot.version>1.2.5</pagehelper.boot.version>
-		<swagger.version>2.7.0</swagger.version>
-	</properties>
 
     <dependencies>
     
-        <!-- pagehelper 分页插件 -->
-		<dependency>
-			<groupId>com.github.pagehelper</groupId>
-			<artifactId>pagehelper-spring-boot-starter</artifactId>
-			<version>${pagehelper.boot.version}</version>
-		</dependency>
-
-		<!-- swagger2-->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>${swagger.version}</version>
-		</dependency>
-		
-		<!-- swagger2-UI-->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${swagger.version}</version>
-		</dependency>
-
         <!-- 用户模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
