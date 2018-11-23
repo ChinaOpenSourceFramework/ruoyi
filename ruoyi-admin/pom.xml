@@ -21,14 +21,7 @@
 	</properties>
 
     <dependencies>
-
-        <!-- spring-boot-devtools -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<optional>true</optional> <!-- 表示依赖不会传递 -->
-		</dependency>
-        
+    
         <!-- pagehelper 分页插件 -->
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
@@ -50,12 +43,25 @@
 			<version>${swagger.version}</version>
 		</dependency>
 
-		<!-- 核心模块-->
+        <!-- 用户模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-framework</artifactId>
+            <artifactId>ruoyi-cust</artifactId>
             <version>${ruoyi.version}</version>
-
+        </dependency>
+        
+        <!-- 定时任务-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-quartz</artifactId>
+            <version>${ruoyi.version}</version>
+        </dependency>
+        
+        <!-- 代码生成-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-generator</artifactId>
+            <version>${ruoyi.version}</version>
         </dependency>
         
     </dependencies>
