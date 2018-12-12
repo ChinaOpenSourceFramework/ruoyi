@@ -46,3 +46,6 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
+    redis:
+      host: 39.106.101.36
+      password: e2e2c3QQf974

@@ -80,7 +80,11 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>${mybatis.boot.version}</version>
         </dependency>
-
+        <!-- SpringBoot集成redis框架 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
         <!-- Mysql驱动包 -->
         <dependency>
             <groupId>mysql</groupId>

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.servlet.Filter;
 
-import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -17,8 +16,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 
-import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.shiro.realm.UserRealm;
 import com.ruoyi.framework.shiro.session.OnlineSessionDAO;
 import com.ruoyi.framework.shiro.session.OnlineSessionFactory;
@@ -81,65 +80,23 @@ public class ShiroConfig
     @Value("${shiro.user.unauthorizedUrl}")
     private String unauthorizedUrl;
 
-    
-//    /**
-//     * 配置shiro redisManager
-//     * 使用的是shiro-redis开源插件
-//     *
-//     * @return
-//     */
-//    @Bean
-//    public RedisManager redisManager() {
-//        RedisManager redisManager = new RedisManager();
-//        redisManager.setHost("39.106.101.36");
-//        redisManager.setPort(6379);
-//        redisManager.setPassword("e2e2c3QQf974");
-//        return redisManager;
-//    }
-//    
-//    
-//    /**
-//     * cacheManager 缓存 redis实现
-//     * 使用的是shiro-redis开源插件
-//     *
-//     * @return
-//     */
-//    @Bean
-//    public RedisCacheManager getEhCacheManager() {
-//        RedisCacheManager redisCacheManager = new RedisCacheManager();
-//        redisCacheManager.setRedisManager(redisManager());
-//        return redisCacheManager;
-//    }
-    
-    
-    /**
-     * 缓存管理器 使用Ehcache实现
-     */
-    @Bean
-    public EhCacheManager getEhCacheManager()
-    {
-        net.sf.ehcache.CacheManager cacheManager = net.sf.ehcache.CacheManager.getCacheManager("ruoyi");
-        EhCacheManager em = new EhCacheManager();
-        if (StringUtils.isNull(cacheManager))
-        {
-            em.setCacheManagerConfigFile("classpath:ehcache/ehcache-shiro.xml");
-            return em;
-        }
-        else
-        {
-            em.setCacheManager(cacheManager);
-            return em;
-        }
+
+    @Bean(name = "ShiroRedisCacheManager")
+    public ShiroRedisCacheManager redisCacheManager(RedisTemplate<Object, Object> redisTemplate) {
+        ShiroRedisCacheManager redisCacheManager = new ShiroRedisCacheManager(redisTemplate);
+        //name是key的前缀，可以设置任何值，无影响，可以设置带项目特色的值
+        redisCacheManager.createCache("shiro_redis");
+        return redisCacheManager;
     }
 
     /**
      * 自定义Realm
      */
     @Bean
-    public UserRealm userRealm(EhCacheManager cacheManager)
+    public UserRealm userRealm(RedisTemplate<Object, Object> redisTemplate)
     {
         UserRealm userRealm = new UserRealm();
-        userRealm.setCacheManager(cacheManager);
+        userRealm.setCacheManager(redisCacheManager(redisTemplate));
         return userRealm;
     }
 
@@ -168,13 +125,13 @@ public class ShiroConfig
      * 自定义sessionFactory调度器
      */
     @Bean
-    public SpringSessionValidationScheduler sessionValidationScheduler()
+    public SpringSessionValidationScheduler sessionValidationScheduler(RedisTemplate<Object, Object> redisTemplate)
     {
         SpringSessionValidationScheduler sessionValidationScheduler = new SpringSessionValidationScheduler();
         // 相隔多久检查一次session的有效性，单位毫秒，默认就是10分钟
         sessionValidationScheduler.setSessionValidationInterval(validationInterval * 60 * 1000);
         // 设置会话验证调度器进行会话验证时的会话管理器
-        sessionValidationScheduler.setSessionManager(sessionValidationManager());
+        sessionValidationScheduler.setSessionManager(sessionValidationManager(redisTemplate));
         return sessionValidationScheduler;
     }
 
@@ -182,11 +139,11 @@ public class ShiroConfig
      * 会话管理器
      */
     @Bean
-    public OnlineWebSessionManager sessionValidationManager()
+    public OnlineWebSessionManager sessionValidationManager(RedisTemplate<Object, Object> redisTemplate)
     {
         OnlineWebSessionManager manager = new OnlineWebSessionManager();
         // 加入缓存管理器
-        manager.setCacheManager(getEhCacheManager());
+        manager.setCacheManager(redisCacheManager(redisTemplate));
         // 删除过期的session
         manager.setDeleteInvalidSessions(true);
         // 设置全局session超时时间
@@ -206,11 +163,11 @@ public class ShiroConfig
      * 会话管理器
      */
     @Bean
-    public OnlineWebSessionManager sessionManager()
+    public OnlineWebSessionManager sessionManager(RedisTemplate<Object, Object> redisTemplate)
     {
         OnlineWebSessionManager manager = new OnlineWebSessionManager();
         // 加入缓存管理器
-        manager.setCacheManager(getEhCacheManager());
+        manager.setCacheManager(redisCacheManager(redisTemplate));
         // 删除过期的session
         manager.setDeleteInvalidSessions(true);
         // 设置全局session超时时间
@@ -218,7 +175,7 @@ public class ShiroConfig
         // 去掉 JSESSIONID
         manager.setSessionIdUrlRewritingEnabled(false);
         // 定义要使用的无效的Session定时调度器
-        manager.setSessionValidationScheduler(sessionValidationScheduler());
+        manager.setSessionValidationScheduler(sessionValidationScheduler(redisTemplate));
         // 是否定时检查session
         manager.setSessionValidationSchedulerEnabled(true);
         // 自定义SessionDao
@@ -232,7 +189,7 @@ public class ShiroConfig
      * 安全管理器
      */
     @Bean
-    public SecurityManager securityManager(UserRealm userRealm)
+    public SecurityManager securityManager(UserRealm userRealm,RedisTemplate<Object, Object> redisTemplate)
     {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 设置realm.
@@ -240,9 +197,9 @@ public class ShiroConfig
         // 记住我
         securityManager.setRememberMeManager(rememberMeManager());
         // 注入缓存管理器;
-        securityManager.setCacheManager(getEhCacheManager());
+        securityManager.setCacheManager(redisCacheManager(redisTemplate));
         // session管理器
-        securityManager.setSessionManager(sessionManager());
+        securityManager.setSessionManager(sessionManager(redisTemplate));
         return securityManager;
     }
 
